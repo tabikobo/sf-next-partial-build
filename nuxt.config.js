@@ -36,6 +36,17 @@ export default {
   build: {},
 
   generate: {
+    cache: {
+      ignore: [
+        ".nuxt", // buildDir
+        "static", // dir.static
+        "dist", // generate.dir
+        "out",
+        "infra",
+        "node_modules",
+        "README.md",
+      ],
+    },
     routes() {
       const rIdx = process.argv.indexOf("-r");
       if (rIdx > -1) {

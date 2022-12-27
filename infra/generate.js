@@ -1,16 +1,10 @@
-const exec = require("child_process").exec;
+const execSync = require("child_process").execSync;
 const AWS = require("aws-sdk");
 AWS.config.update({ region: process.env.AWS_REGION });
 const ddb = new AWS.DynamoDB({ apiVersion: "2012-08-10" });
 
 function execute(command) {
-  exec(command, function (error, stdout, stderr) {
-    console.log(stdout);
-    console.error(stderr);
-    if (error) {
-      console.error("[ERROR]", error);
-    }
-  });
+  execSync(command, { stdio: "inherit" });
 }
 
 async function getJobDetail(jobId) {
@@ -30,8 +24,9 @@ async function generate() {
   buildDetail = await getJobDetail(jobId);
 
   // =============== BUILD FULL ================
-  if (!buildDetail.entry) {
+  if (!buildDetail.entry || buildDetail.entry.is_build_full) {
     console.log("Generate target: full");
+    execute(`rm -r ${process.env.PUBLISH_DIR}`);
     execute(`yarn generate`);
     return;
   }
@@ -47,4 +42,15 @@ async function generate() {
   execute(`yarn generate -r '${JSON.stringify(routes)}'`);
 }
 
-generate();
+function postGenerate() {
+  console.log("Starting postGenerate");
+  execute(`mkdir -p ${process.env.PUBLISH_DIR}`);
+  execute(`cp -ru dist/* ${process.env.PUBLISH_DIR}`);
+  execute(`ls -l ${process.env.PUBLISH_DIR}/tour`);
+}
+
+function main() {
+  generate().then(postGenerate);
+}
+
+main();
