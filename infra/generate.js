@@ -26,7 +26,7 @@ async function generate() {
   // =============== BUILD FULL ================
   if (!buildDetail.entry || buildDetail.entry.is_build_full) {
     console.log("Generate target: full");
-    execute(`rm -r ${process.env.PUBLISH_DIR}`);
+    execute(`rm -rf ${process.env.PUBLISH_DIR}`);
     execute(`yarn generate`);
     return;
   }
