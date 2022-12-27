@@ -1,0 +1,27 @@
+version: 1
+frontend:
+  phases:
+    preBuild:
+      commands:
+        - yarn install
+        - cd infra
+        - yarn install
+    build:
+      commands:
+        - yarn generate:incremental
+    # postBuild:
+    #   commands:
+    #     - date | tee dist/build-time.txt
+    #     - cp -rf dist/* dist_full
+    #     - rm -rf dist
+    #     - mv dist_full dist
+    #     - zip -q -r dist.zip dist
+    #     - aws s3 cp ./dist.zip s3://tabikobo-bucket-01/deployment/web1/dist.zip
+  artifacts:
+    baseDirectory: dist
+    files:
+      - "**/*"
+  cache:
+    paths:
+      - node_modules/**/*
+      - dist/**/*

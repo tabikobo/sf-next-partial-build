@@ -37,6 +37,12 @@ export default {
 
   generate: {
     routes() {
+      const rIdx = process.argv.indexOf("-r");
+      if (rIdx > -1) {
+        return JSON.parse(process.argv[rIdx + 1]);
+      }
+
+      // build full
       const codes = [
         "OITEK9VFR-SGC-YE",
         "TSINSQ35AP-YOK-FM4",

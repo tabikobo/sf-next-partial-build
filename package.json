@@ -6,7 +6,8 @@
     "dev": "nuxt",
     "build": "nuxt build",
     "start": "nuxt start",
-    "generate": "nuxt generate --fail-on-error"
+    "generate": "nuxt generate --fail-on-error",
+    "generate:incremental": "node infra/generate.js"
   },
   "dependencies": {
     "@nuxtjs/composition-api": "^0.24.4",
